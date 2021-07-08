@@ -6,8 +6,16 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom",
 				"app-plus": {
-					"scrollIndicator": false ,//禁用原生导航栏
-					"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+					"scrollIndicator": false, //禁用原生导航栏
+					"bounce": "none", // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+					"subNVues": [{
+						"id": "menus",
+						"path": "paltform/app-plus/subNVue/menus", // 页面路径  
+						"type": "popup",
+						"style": {
+							"width": "50%"
+						}
+					}]
 				}
 			}
 		},
@@ -71,8 +79,8 @@
 		"navigationBarBackgroundColor": "#090808",
 		"backgroundColor": "#fbf9fe",
 		// "titleNView": false,//沉浸式导航
-		"app-plus" : {
-			"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+		"app-plus": {
+			"bounce": "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
 		}
 	}
 }

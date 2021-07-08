@@ -10,7 +10,7 @@
 				<view class="wcont">
 					<!-- 主导航条 -->
 					<view class="tnavs">
-						<view class="tnavs-l">
+						<view class="tnavs-l" @tap="showmenu">
 							<image src="../../static/icon/icon01.png" mode="aspectFit"></image>
 						</view>
 						<view class="tnavs-c">分类</view>
@@ -129,6 +129,10 @@
 			recommendChange(e) {
 				this.current = e.detail.current;
 			},
+			//打开菜单
+			showmenu() {
+				uni.getSubNVueById('menus').show('slide-in-left', 200);
+			},
 			//切换视图
 			showtap(e) {
 				let _ind = e.target.dataset.index;
@@ -174,7 +178,6 @@
 
 	.nav-bar-logo {
 		image {
-			display: block;
 			height: 50rpx;
 		}
 	}
