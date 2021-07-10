@@ -1,6 +1,6 @@
 <template>
 	<view id="home">
-		<uni-nav-bar statusBar="true">
+		<uni-nav-bar :statusBar="true">
 			<view class="nav-bar-logo">
 				<image src="../../static/icon/logo.png" mode="aspectFit"></image>
 			</view>
@@ -11,7 +11,7 @@
 					<!-- 主导航条 -->
 					<view class="tnavs">
 						<view class="tnavs-l" @tap="showmenu">
-							<image src="../../static/icon/icon01.png" mode="aspectFit"></image>
+							<image src="../../static/icon/icon01.png" mode="aspectFill"></image>
 						</view>
 						<view class="tnavs-c">分类</view>
 						<view class="tnavs-r">
@@ -21,6 +21,10 @@
 				</view>
 			</view>
 		</view>
+		<!-- 菜单 -->
+		<uni-drawer :width="350" ref="mmenu" mode="left">
+			<m-menu></m-menu>
+		</uni-drawer>
 		<!-- 轮播推荐条 -->
 		<view class="recommend-swiper-box">
 			<view class="wcont">
@@ -104,11 +108,11 @@
 		data() {
 			return {
 				recommend: [{
-						url: "aaa",
+						url: "/pages/readhis/index",
 						img: "/static/temp/ls01.jpg"
 					},
 					{
-						url: "aaa",
+						url: "/pages/readhis/index",
 						img: "/static/temp/ls01.jpg"
 					}
 				], //推荐轮播图
@@ -131,6 +135,8 @@
 			},
 			//打开菜单
 			showmenu() {
+				this.$refs.mmenu.open();
+				return;
 				uni.getSubNVueById('menus').show('slide-in-left', 200);
 			},
 			//切换视图
@@ -177,6 +183,9 @@
 	}
 
 	.nav-bar-logo {
+		display: flex;
+		align-items: center;
+
 		image {
 			height: 50rpx;
 		}
@@ -211,9 +220,20 @@
 			padding: 10rpx 25rpx;
 		}
 
-		.tnavs-l,
+		.tnavs-l {
+			border: 2px solid #000;
+			border-radius: 50%;
+			overflow: hidden;
+
+			image {
+				display: block;
+				width: 64rpx;
+				height: 64rpx;
+			}
+		}
+
 		.tnavs-r {
-			& image {
+			image {
 				display: block;
 				width: 64rpx;
 				height: 64rpx;

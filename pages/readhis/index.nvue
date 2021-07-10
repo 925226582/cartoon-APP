@@ -1,0 +1,64 @@
+<template>
+	<view class="box">
+		<list class="hislist" :bounce="false" :loadmoreoffset="100" @loadmore="lomore">
+			<!-- 下拉 -->
+			<refresh class="refresh" @refresh="onrefresh" @pullingdown="onpullingdown"
+				:display="refreshing ? 'show' : 'hide'">
+			</refresh>
+			<cell
+				v-for="(item,index) in [1,1,1,1,1,1,1,11,1,11,1,1,1,11,1,11,1,9999]"
+				:key="index"><text>{{item+index}}</text>
+			</cell>
+			<!-- 上拉 -->
+			<loading @loading="onloading" @pullingup="onpullingup" :display="isload ? 'show' : 'hide'">
+				<text>loading...</text>
+			</loading>
+		</list>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				refreshing: true,
+				isload: true
+			}
+		},
+
+		methods: {
+			lomore() {
+				console.log("loadmore")
+			},
+			onrefresh(e) {
+				this.refreshing = false;
+			},
+			onpullingdown(e) {
+				if (!this.refreshing) this.refreshing = true;
+			},
+			onloading(e) {
+				this.isload = false;
+				// console.log("ok")
+			},
+			onpullingup(e) {
+				if (!this.isload) this.isload = true;
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.box{
+		flex:1
+	}
+	.hislist {
+		flex-direction: column;
+		background-color: #007AFF;
+	}
+
+	.refresh {
+		height: 100rpx;
+		background-color: red;
+	}
+
+</style>
