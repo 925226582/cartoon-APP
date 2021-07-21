@@ -1,18 +1,44 @@
 <template>
 	<view class="box">
-		<list class="hislist" :bounce="false" :loadmoreoffset="100" @loadmore="lomore">
+		<list class="hislist" :show-scrollbar="false" :bounce="false" :loadmoreoffset="100" @loadmore="lomore">
 			<!-- 下拉 -->
 			<refresh class="refresh" @refresh="onrefresh" @pullingdown="onpullingdown"
 				:display="refreshing ? 'show' : 'hide'">
+				<template v-if="reok">
+					<image v-if="resuccess" src="/static/reload/success.png" class="restatus" mode="aspectFit"></image>
+					<image v-else src="/static/reload/error.png" class="restatus" mode="aspectFit"></image>
+				</template>
+				<template v-else>
+					<image v-if="reloading" src="/static/reload/loading.png" class="reload" mode="aspectFit"
+						:class="{reloading:reloading}"></image>
+					<image v-else src="/static/reload/pulldown.png" class="reimg" mode="aspectFit"
+						:class="{react:redown}"></image>
+				</template>
+				<text class="retxt">{{retxt}}</text>
 			</refresh>
-			<cell
-				v-for="(item,index) in [1,1,1,1,1,1,1,11,1,11,1,1,1,11,1,11,1,9999]"
-				:key="index"><text>{{item+index}}</text>
+			<cell class="hisitem" v-for="(item,index) in hislist" :key="index">
+				<navigator hover-class="nhover" url="" class="bookitem">
+					<view class="booklt">
+						<image src="../../static/temp/ls02.jpg" mode="aspectFill" class="hisimg"></image>
+						<view class="bookinfo">
+							<text class="mhistit">{{index}}诛心之罪诛心之罪诛心之罪诛心之罪诛心之罪诛心之罪诛心之罪诛心之罪诛心之罪</text>
+							<text class="mhisnw">最新：罪诛心之罪诛心之罪诛心之罪</text>
+							<text class="mhisdec">2话 / 236话</text>
+						</view>
+					</view>
+					<uni-icons type="arrowright" color="#999999" size="24"></uni-icons>
+				</navigator>
+			</cell>
+			<!-- 触底 -->
+			<cell class="bottom">
+				<view class="bottom-box">
+					<text class="bottom-txt">正在加载中</text>
+				</view>
 			</cell>
 			<!-- 上拉 -->
-			<loading @loading="onloading" @pullingup="onpullingup" :display="isload ? 'show' : 'hide'">
+			<!-- 			<loading @loading="onloading" @pullingup="onpullingup" :display="isload ? 'show' : 'hide'">
 				<text>loading...</text>
-			</loading>
+			</loading> -->
 		</list>
 	</view>
 </template>
@@ -21,20 +47,63 @@
 	export default {
 		data() {
 			return {
-				refreshing: true,
-				isload: true
+				refreshing: true, //下拉刷新显隐
+				redown: false, //下拉刷新
+				retxt: "下拉即可刷新", //下拉刷新文本
+				reloading: false, //是否正在刷新
+				reok: false, //是否完成
+				resuccess: true, //是否成功
+				isload: true, //上拉
+				hislist: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 			}
 		},
 
 		methods: {
 			lomore() {
 				console.log("loadmore")
+				setTimeout(()=>{
+					this.hislist.push(...[1, 1, 1, 1, 1, 1])
+				},1000)
 			},
 			onrefresh(e) {
-				this.refreshing = false;
+				this.$nextTick(() => {
+					this.reloading = true;
+					this.retxt = "正在刷新";
+
+					setTimeout(() => {
+						//完成状态
+						this.reok = true;
+						this.reloading = false;
+						this.redown = false;
+						//模拟
+						this.$nextTick(() => {
+							if (Math.random() > 0.5) {
+								this.resuccess = true;
+								this.retxt = "刷新成功"
+							} else {
+								this.resuccess = false;
+								this.retxt = "刷新失败"
+							}
+						})
+						//归位
+						setTimeout(() => {
+							this.refreshing = false;
+						}, 1000)
+					}, 2000)
+				})
+
 			},
 			onpullingdown(e) {
 				if (!this.refreshing) this.refreshing = true;
+				if (this.reok) this.reok = false;
+				let _py = e.pullingDistance;
+				if (_py > 150) {
+					this.redown = true;
+					this.retxt = "松开即可刷新";
+				} else {
+					this.redown = false;
+					this.retxt = "下拉即可刷新";
+				}
 			},
 			onloading(e) {
 				this.isload = false;
@@ -48,17 +117,140 @@
 </script>
 
 <style lang="scss">
-	.box{
-		flex:1
+	.box {
+		flex: 1
 	}
+
 	.hislist {
 		flex-direction: column;
-		background-color: #007AFF;
 	}
 
+	.hisitem {
+		flex-direction: column;
+		padding: 30rpx;
+		border-bottom-color: #666;
+		border-bottom-width: 1px;
+		border-style: solid;
+	}
+
+	.bookitem {
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.booklt {
+		align-items: center;
+	}
+
+	.hisimg {
+		width: 120rpx;
+		height: 120rpx;
+		border-radius: 15rpx;
+		margin-right: 25rpx;
+	}
+
+	.bookinfo {
+		flex-direction: column;
+	}
+
+	.mhistit {
+		font-weight: 100;
+		font-size: 18px;
+		color: #000;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		lines: 1;
+		width: 450rpx;
+	}
+
+	.mhisnw {
+		font-weight: 100;
+		font-size: 14px;
+		color: #666;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		lines: 1;
+		margin-top: 10rpx;
+		width: 450rpx;
+	}
+
+	.mhisdec {
+		font-weight: 100;
+		font-size: 14px;
+		color: #666;
+		margin-top: 10rpx;
+	}
+
+	// 下拉刷新
 	.refresh {
 		height: 100rpx;
-		background-color: red;
+		align-items: center;
+		justify-content: center;
+		background-color: #999;
 	}
 
+	//箭头
+	.reimg {
+		width: 40rpx;
+		height: 40rpx;
+		transform: rotate(0);
+		transition-duration: 0.5s;
+		transition-property: transform;
+	}
+
+	.react {
+		transform: rotate(-180deg);
+	}
+
+	//加载
+	.reload {
+		width: 40rpx;
+		height: 40rpx;
+		transform: rotate(0);
+		transition-property: transform;
+	}
+
+	.reloading {
+		transition-duration: 10s;
+		transition-timing-function: linear;
+		transform: rotate(-3600deg);
+	}
+
+	//状态
+	.restatus {
+		width: 40rpx;
+		height: 40rpx;
+		transition-duration: 0s;
+		transform: rotate(0);
+		transition-property: transform;
+	}
+
+	//文字
+	.retxt {
+		font-size: 16px;
+		color: #ffcc00;
+		margin-left: 20rpx;
+		width: 180rpx;
+		text-align: center;
+	}
+
+	//触底展示
+	.bottom {
+		flex-direction: column;
+		background-color: #666;
+	}
+
+	.bottom-box {
+		justify-content: center;
+		align-items: center;
+		height: 60rpx;
+	}
+
+	.bottom-txt {
+		font-size: 16px;
+		color: #ffcc00;
+		margin-left: 20rpx;
+		width: 180rpx;
+		text-align: center;
+	}
 </style>
