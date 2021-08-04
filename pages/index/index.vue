@@ -1,105 +1,111 @@
 <template>
 	<view id="home">
-		<uni-nav-bar :statusBar="true">
-			<view class="nav-bar-logo">
-				<image src="../../static/icon/logo.png" mode="aspectFit"></image>
-			</view>
-		</uni-nav-bar>
-		<view class="tbox">
-			<view class="tbox-cont">
-				<view class="wcont">
-					<!-- 主导航条 -->
-					<view class="tnavs">
-						<view class="tnavs-l" @tap="showmenu">
-							<image src="../../static/icon/icon01.png" mode="aspectFill"></image>
-						</view>
-						<view class="tnavs-c">分类</view>
-						<view class="tnavs-r">
-							<image src="../../static/icon/icon02.png" mode="aspectFit"></image>
+		<scroll-view :scroll-y="true" style="height:100%;position: fixed;top:0;left:0;width:100%">
+			<uni-nav-bar :statusBar="true">
+				<view class="nav-bar-logo">
+					<image src="../../static/icon/logo.png" mode="aspectFit"></image>
+				</view>
+			</uni-nav-bar>
+			<view class="tbox">
+				<view class="tbox-cont">
+					<view class="wcont">
+						<!-- 主导航条 -->
+						<view class="tnavs">
+							<view class="tnavs-l" @tap="showmenu">
+								<image src="../../static/icon/icon01.png" mode="aspectFill"></image>
+							</view>
+							<navigator class="tnavs-c" url="/pages/category/index" hover-class="nhover">
+								<text class="iconfont icon-Category"></text>
+								<text class="tnavs-c-txt">分类</text>
+							</navigator>
+							<navigator class="tnavs-r" url="/pages/mysearch/index" hover-class="nhover">
+								<image src="../../static/icon/icon02.png" mode="aspectFit"></image>
+							</navigator>
 						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-		<!-- 菜单 -->
-		<uni-drawer :width="350" ref="mmenu" mode="left">
-			<m-menu></m-menu>
-		</uni-drawer>
-		<!-- 轮播推荐条 -->
-		<view class="recommend-swiper-box">
-			<view class="wcont">
-				<view class="recommend-swiper">
-					<uni-swiper-dot :info="recommend" :current="current" mode="round" :dotsStyles="dotsStyles">
-						<swiper class="swiper-box" @change="recommendChange" autoplay="true" circular="true">
-							<swiper-item v-for="(item ,index) in recommend" :key="index">
-								<navigator :url="item.url" hover-class="none">
-									<image :src="item.img" mode="aspectFill"></image>
+			<!-- 菜单 -->
+			<uni-drawer :width="350" ref="mmenu" mode="left">
+				<m-menu></m-menu>
+			</uni-drawer>
+			<!-- 轮播推荐条 -->
+			<view class="recommend-swiper-box">
+				<view class="wcont">
+					<view class="recommend-swiper">
+						<uni-swiper-dot :info="recommend" :current="current" mode="round" :dotsStyles="dotsStyles">
+							<swiper class="swiper-box" @change="recommendChange" autoplay="true" circular="true">
+								<swiper-item v-for="(item ,index) in recommend" :key="index">
+									<navigator :url="item.url" hover-class="none">
+										<image :src="item.img" mode="aspectFill"></image>
+									</navigator>
+								</swiper-item>
+							</swiper>
+						</uni-swiper-dot>
+					</view>
+				</view>
+			</view>
+			<view class="container-ctrl">
+				<view class="container-ctrl-box" @tap="showtap">
+					<view class="container-btn" :class="{on:showtapindex==1}" data-index="1">发现</view>
+					<view class="container-btn" :class="{on:showtapindex==2}" data-index="2">推荐</view>
+				</view>
+			</view>
+			<view class="container">
+				<view class="container-item" v-if="showtapindex==1" style="background-color: #fff;">
+					<view class="wcont">
+						<!-- 推荐 -->
+						<view class="listbox">
+							<book-list col="3" booknumse="false"></book-list>
+							<view class="vmore-box">
+								<navigator class="vmore" url="" hover-class="nhover">
+									<text class="iconfont icon-Category"></text>
+									<text>查看更多</text>
 								</navigator>
-							</swiper-item>
-						</swiper>
-					</uni-swiper-dot>
-				</view>
-			</view>
-		</view>
-		<view class="container-ctrl">
-			<view class="container-ctrl-box" @tap="showtap">
-				<view class="container-btn" :class="{on:showtapindex==1}" data-index="1">发现</view>
-				<view class="container-btn" :class="{on:showtapindex==2}" data-index="2">推荐</view>
-			</view>
-		</view>
-		<view class="container">
-			<view class="container-item" v-if="showtapindex==1" style="background-color: #fff;">
-				<view class="wcont">
-					<!-- 推荐 -->
-					<view class="listbox">
-						<book-list col="3" booknumse="false"></book-list>
-						<view class="vmore-box">
-							<navigator class="vmore" url="" hover-class="nhover">
-								<text class="iconfont icon-Category"></text>
-								<text>查看更多</text>
-							</navigator>
+							</view>
 						</view>
-					</view>
-					<!-- 今日更新 -->
-					<view class="listbox">
-						<view class="tytitle">
-							<text>今日更新</text>
+						<!-- 今日更新 -->
+						<view class="listbox">
+							<view class="tytitle">
+								<text>今日更新</text>
+							</view>
+							<book-list col="3" booknumse="false"></book-list>
+							<view class="vmore-box">
+								<navigator class="vmore" url="" hover-class="nhover">
+									<text class="iconfont icon-Category"></text>
+									<text>查看更多</text>
+								</navigator>
+							</view>
 						</view>
-						<book-list col="3" booknumse="false"></book-list>
-						<view class="vmore-box">
-							<navigator class="vmore" url="" hover-class="nhover">
-								<text class="iconfont icon-Category"></text>
-								<text>查看更多</text>
-							</navigator>
-						</view>
-					</view>
-					<!-- 排行榜 -->
-					<view class="listbox">
-						<view class="tytitle">
-							<text>排行榜</text>
-						</view>
-						<view class="rankctrl">
-							<view class="rankbtn on">人气榜</view>
-							<view class="rankbtn">黑马榜</view>
-							<view class="rankbtn">新作榜</view>
-						</view>
-						<book-list rank="true" col="3" booknumse="false"></book-list>
-						<view class="vmore-box">
-							<navigator class="vmore" url="" hover-class="nhover">
-								<text class="iconfont icon-Category"></text>
-								<text>查看更多</text>
-							</navigator>
+						<!-- 排行榜 -->
+						<view class="listbox">
+							<view class="tytitle">
+								<text>排行榜</text>
+							</view>
+							<view class="rankctrl">
+								<view class="rankbtn on">人气榜</view>
+								<view class="rankbtn">黑马榜</view>
+								<view class="rankbtn">新作榜</view>
+							</view>
+							<book-list rank="true" col="3" booknumse="false"></book-list>
+							<view class="vmore-box">
+								<navigator class="vmore" url="" hover-class="nhover">
+									<text class="iconfont icon-Category"></text>
+									<text>查看更多</text>
+								</navigator>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="container-item" v-if="showtapindex==2" style="background-color: #ffcc00;">
-				<view class="wcont">
-					<book-list col="2" booknumse="true"></book-list>
+				<view class="container-item" v-if="showtapindex==2" style="background-color: #ffcc00;">
+					<view class="wcont">
+						<book-list col="2" booknumse="true"></book-list>
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="copyright">© DAYADAYA.COM</view>
+			<view class="copyright">© DAYADAYA.COM</view>
+		</scroll-view>
+		
 	</view>
 </template>
 
@@ -181,7 +187,9 @@
 	#home {
 		width: 100%;
 	}
-
+	.uni-scroll-view-content{
+		height: auto !important;
+	}
 	.nav-bar-logo {
 		display: flex;
 		align-items: center;
@@ -213,11 +221,16 @@
 
 
 		.tnavs-c {
+			display: flex;
+			align-items: center;
 			font-size: 24rpx;
 			color: #ffff00;
 			background-color: #e8ba00;
 			border-radius: 10000px;
 			padding: 10rpx 25rpx;
+			.tnavs-c-txt{
+				margin-left: 10rpx;
+			}
 		}
 
 		.tnavs-l {

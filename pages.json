@@ -16,11 +16,50 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom",
 				"app-plus": {
-					"titleNView":{
-						"titleText":"阅读历史",
-						"titleSize":"18px",
-						"titleColor":"#ffcc00",
-						"backgroundImage":"/static/img/bg.jpg"
+					"titleNView": {
+						"titleText": "阅读历史",
+						"titleSize": "18px",
+						"titleColor": "#ffcc00",
+						"backgroundImage": "/static/img/bg.jpg"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/category/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": {
+						"titleText": "分类",
+						"titleSize": "18px",
+						"titleColor": "#ffcc00",
+						"backgroundImage": "/static/img/bg.jpg",
+						"buttons": [{
+							"fontSrc": "/static/iconfont.ttf",
+							"text": "\ue688",
+							"fontSize": "26px",
+							"float": "right",
+							"color": "#ffcc00",
+							"colorPressed": "#d4aa00",
+							"width": "auto"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/mysearch/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": {
+						"titleText": "搜索页",
+						"titleSize": "18px",
+						"titleColor": "#ffcc00",
+						"backgroundImage": "/static/img/bg.jpg"
 					}
 				}
 			}
